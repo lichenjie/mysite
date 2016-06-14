@@ -1,0 +1,274 @@
+<!DOCTYPE HTML>
+
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Quick start with DataTable</title>
+    <link rel="stylesheet" type="text/css" href="{../static/codebase/webix.css %}">
+    <script type="text/javascript" src="static/webix.js"></script>
+    <script type="text/javascript" src="../static/codebase/FileSaver.js"></script>
+</head>
+<body>
+ 
+    <div id="menu" style="position:fixed;left:500px;width:100%;"></div>
+    <div id="treetable"></div>
+
+    
+    <script type="application/javascript" charset="utf-8">
+		webix.ready(function(){          
+			webix.ui({
+				container:"menu",
+                view:"menu",
+                data:[
+					{ id:"1",value:"模板编辑", submenu:[
+						{id:"add",value:"添加节点"}, 
+                        {id:"addChild",value:"添加子节点"},
+                        {id:"remove",value:"删除节点"}
+					]},
+					{ id:"2",value:"节点控制", submenu:[
+						{id:"expandAll",value:"全部展开"}, 
+                        {id:"collapseAll",value:"全部折叠"},
+					]},
+					{ id:"export",value:"导出模板..."},
+					{ id:"send",value:"发送报文" }
+				],
+				on:{
+					onMenuItemClick:function(id){
+                        var invalid = false;
+                        var failed = false;
+                        switch (id){
+                            case "add":
+                                var item = grid_box.getSelectedItem();
+                                grid_box.add({"key":"node"}, -1, item!=null?item.$parent:0);
+                                break;
+                            case "addChild":
+                                var item = grid_box.getSelectedItem();
+                                if (item == null){
+                                    failed = true;
+                                }else{
+                                    grid_box.add({"key":"node"}, -1, item.id);
+                                    grid_box.open(item.id,true);
+                                }
+                                break;
+                            case "remove":
+                                var item = grid_box.getSelectedItem();
+                                if (item == null){
+                                    failed = true;
+                                }else{
+                                    grid_box.remove(item.id);
+                                }
+                                break;
+                            case "expandAll":
+                                grid_box.openAll();
+                                break;
+                            case "collapseAll":
+                                grid_box.closeAll();
+                                break;
+                            case "export":
+                                saveTextAs(JSON.stringify(toJson(),null,"\t"), "test.json");
+                                break;
+                            case "send":
+                                break;
+                            default: 
+                                invalid = true;
+                        }
+                        if (invalid) return;
+						webix.message(this.getMenuItem(id).value+(failed?"失败":"成功")+"!");
+					}
+				},
+                type:{
+                    subsign:true
+                }
+			});	
+            
+            function toJson(){
+                var DEF_ROOT = "@@_root_";
+                var result = [];
+                var ids = new Array();
+                ids.push({"id":DEF_ROOT,"data":result});
+                
+                while(ids.length > 0){
+                    var obj = ids.pop();
+                    var id = obj.id;
+                    var data = obj.data;
+                    if (id==DEF_ROOT){
+                        id = grid_box.getFirstId();
+                    } else {
+                        id = grid_box.getFirstChildId(id);
+                    }
+                    if (id==null) return [];
+                    do{
+                        im = grid_box.getItem(id);
+                        var idx = data.push({"id":im.id,"key":im.key,"value":im.value}) - 1;
+                        if(grid_box.isBranch(id)){
+                            data[idx]["data"] = []
+                            ids.push({"id":id,"data":data[idx]["data"]});
+                        }
+                        id = grid_box.getNextSiblingId(id);
+                    }while(id!=null)  
+                }
+                return result;
+            }
+               
+            grid_box = new webix.ui({
+                    container:"treetable",
+                    view:"treetable",
+                    editable:true,
+                    editaction:"custom",
+                    navigation:true,
+				    select:"cell",
+                    autoheight:true,
+                    autowidth:true,
+                    columns:[
+                        { id:"key",	header:"节点", width:250, template:"{common.treetable()} #key#", editor:"text"},
+                        { id:"value", header:"值", width:230, editor:"text"}
+                    ],
+                    data:[
+                        {
+                            "id": 1463895972918,
+                            "key": "root",
+                            "data": [
+                                {
+                                    "id": 1463895972921,
+                                    "key": "Pub",
+                                    "data": [
+                                        {
+                                            "id": 1463895972926,
+                                            "key": "Version"
+                                        },
+                                        {
+                                            "id": 1463895972929,
+                                            "key": "TradeCode"
+                                        },
+                                        {
+                                            "id": 1463895972932,
+                                            "key": "Date"
+                                        },
+                                        {
+                                            "id": 1463895972936,
+                                            "key": "BankId"
+                                        },
+                                        {
+                                            "id": 1463895972939,
+                                            "key": "TradeSrc"
+                                        },
+                                        {
+                                            "id": 1463895972942,
+                                            "key": "MktCode"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972945,
+                                    "key": "Serial",
+                                    "data": [
+                                        {
+                                            "id": 1463895972948,
+                                            "key": "BankSerial"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972951,
+                                    "key": "MoneyKind",
+                                    "data": [
+                                        {
+                                            "id": 1463895972954,
+                                            "key": "MoneyKind"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972957,
+                                    "key": "BankAcc",
+                                    "data": [
+                                        {
+                                            "id": 1463895972960,
+                                            "key": "BankAcc"
+                                        },
+                                        {
+                                            "id": 1463895972961,
+                                            "key": "CustName"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972966,
+                                    "key": "FundAcc",
+                                    "data": [
+                                        {
+                                            "id": 1463895972969,
+                                            "key": "VaccId"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972972,
+                                    "key": "Transfer",
+                                    "data": [
+                                        {
+                                            "id": 1463895972975,
+                                            "key": "TransferAmount"
+                                        },
+                                        {
+                                            "id": 1463895972978,
+                                            "key": "CurrentBalance"
+                                        },
+                                        {
+                                            "id": 1463895972981,
+                                            "key": "FreezeMoney"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972984,
+                                    "key": "Client"
+                                },
+                                {
+                                    "id": 1463895972987,
+                                    "key": "FlagInfo",
+                                    "data": [
+                                        {
+                                            "id": 1463895972990,
+                                            "key": "Flag1"
+                                        },
+                                        {
+                                            "id": 1463895972993,
+                                            "key": "Flag2"
+                                        }
+                                    ]
+                                },
+                                {
+                                    "id": 1463895972996,
+                                    "key": "SummaryInfo"
+                                },
+                                {
+                                    "id": 1463895972999,
+                                    "key": "Operation"
+                                }
+                            ]
+                        }
+                    ]
+            });          
+            
+            function getItemColumnIndex(im){
+                var columnName = im.id.substring((im.row+'').length + 1, im.id.length);
+                return grid_box.getColumnIndex(columnName);
+            }
+              
+            
+            grid_box.attachEvent("onBeforeSelect", function (data, preserve){
+                return !(grid_box.isBranch(data.row) && getItemColumnIndex(data) > 0);
+            });   
+
+			webix.UIManager.addHotKey("Enter", function(view){
+				var pos = view.getSelectedId();
+				view.edit(pos);
+			}, grid_box);
+            
+								
+		});
+    </script>
+</body>
+</html>
+
