@@ -1,0 +1,15 @@
+<form action = "{% url 'polls:en_xml'  %}" method='post'>
+	{% csrf_token %}
+	<input type='text' name='TradeCode' value=''>交易码</input></br>
+	<input type='text' name='BankId' value=''>银行代码</input></br>
+	<input type='text' name='MktCode' value=''>合作方代码</input></br>
+	<input type='text' name='BankAcc' value=''>银行卡账号</input></br>
+	<input type='text' name='CustName' value=''>开户(企业或者个人)名称</input></br>
+	<input type='text' name='BankCode' value=''>开户行行号(非华夏银行填写)</input></br>
+	<input type='text' name='CashType' value=''>账户类别(1.公司 2.个人)</input></br>
+	<input type='text' name='OpenBankName' value=''>分支行名称(非华夏银行必填)</input></br>
+	<input type='text' name='IsSelf' value=''>是否跨行(0.本行 1.跨行)</input></br>
+	<input type='text' name='CustName' value=''>账户类别(1.公司 2.个人)</input></br>
+	<input type=><br>
+	<input type='Submit' value="确定"/>
+</form>
