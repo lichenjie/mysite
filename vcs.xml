@@ -10,6 +10,10 @@
           <option name="url" value="ssh://git@101.200.73.152:60000/home/git/hfyh.git" />
           <option name="userName" value="" />
         </UrlAndUserName>
+        <UrlAndUserName>
+          <option name="url" value="http://git.coding.net" />
+          <option name="userName" value="18234157658" />
+        </UrlAndUserName>
       </list>
     </option>
     <option name="cloneParentDir" value="E:\PycharmProjects" />
