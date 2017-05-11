@@ -26,6 +26,8 @@
       </entry>
       <entry key="Default">
         <PlaceSettings>
+          <option name="IGNORE_POLICY" value="TRIM_WHITESPACES" />
+          <option name="ENABLE_SYNC_SCROLL" value="false" />
           <option name="HIGHLIGHTING_LEVEL" value="ADVANCED" />
           <option name="EXPAND_BY_DEFAULT" value="false" />
         </PlaceSettings>
